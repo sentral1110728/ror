@@ -241,6 +241,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ast (= 2.4.0)
   bootsnap (>= 1.1.0)
   byebug
   capybara (>= 2.15)
