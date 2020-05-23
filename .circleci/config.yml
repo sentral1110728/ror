@@ -36,6 +36,10 @@ jobs:
     # Database setup
     - run: mv ./config/database.yml.ci ./config/database.yml
 
+    - run:
+        name: 'wait for db'
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m
+        
     # Database setup
     - run:
         name: Databasesetup
