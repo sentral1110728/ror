@@ -25,7 +25,7 @@ jobs:
     - run:
         name: install dependencies
         command: |
-          gem install bundler -v 2.0.2
+          gem install bundler -v 1.17.3
           bundle install --jobs=4 --retry=3 --path vendor/bundle
 
     - save_cache:
@@ -36,6 +36,10 @@ jobs:
     # Database setup
     - run: mv ./config/database.yml.ci ./config/database.yml
 
+    - run:
+        name: 'wait for db'
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m
+        
     # Database setup
     - run:
         name: Databasesetup
@@ -53,10 +57,13 @@ jobs:
 
           bundle exec rspec \
             --format progress \
-            --format RspecJunitFormatter \
             --out /tmp/test-results/rspec.xml \
             --format progress \
             $TEST_FILES
+    # Rubocop
+    - run:
+        name: Rubocop
+        command: bundle exec rubocop
 
     # collect reports
     - store_test_results:
